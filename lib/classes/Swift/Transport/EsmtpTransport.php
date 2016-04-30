@@ -139,6 +139,10 @@ class Swift_Transport_EsmtpTransport extends Swift_Transport_AbstractSmtpTranspo
      */
     public function setEncryption($encryption)
     {
+<<<<<<< HEAD
+=======
+        $encryption = strtolower($encryption);    
+>>>>>>> 1de4a63... removed unneeded code
         if ('tls' == $encryption) {
             $this->_params['protocol'] = 'tcp';
             $this->_params['tls'] = true;
