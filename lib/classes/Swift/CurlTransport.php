@@ -31,6 +31,7 @@ class Swift_CurlTransport extends Swift_Transport_CurlTransport
 
         $this->setHost($host);
         $this->setPort($port);
+        $this->setEncryption($security);
     }
 
     /**

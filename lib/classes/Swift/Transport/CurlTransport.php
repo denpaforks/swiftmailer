@@ -317,6 +317,7 @@ class Swift_Transport_CurlTransport implements Swift_Transport
         $this->_buffer['message'] .= "QUIT\r\n";
 
         curl_setopt($this->_curl, CURLOPT_CUSTOMREQUEST, implode('', $this->_buffer) . "\r\n");
+
         return curl_exec($this->_curl);
     }
 
