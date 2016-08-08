@@ -20,6 +20,10 @@ Swift_DependencyContainer::getInstance()
     ->asNewInstanceOf('Swift_Transport_MailTransport')
     ->withDependencies(array('transport.mailinvoker', 'transport.eventdispatcher'))
 
+    ->register('transport.curl')
+    ->asNewInstanceOf('Swift_Transport_CurlTransport')
+    ->withDependencies(array('transport.eventdispatcher'))
+
     ->register('transport.loadbalanced')
     ->asNewInstanceOf('Swift_Transport_LoadBalancedTransport')
 
