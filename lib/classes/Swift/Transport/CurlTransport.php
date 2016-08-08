@@ -23,7 +23,7 @@ class Swift_Transport_CurlTransport implements Swift_Transport
     /** Curl handle */
     protected $_curl;
 
-    /** Connection status */
+    /** Curl status */
     protected $_started = false;
 
     /** Curl payload buffer */
@@ -38,7 +38,7 @@ class Swift_Transport_CurlTransport implements Swift_Transport
         'host' => 'localhost',
         'port' => 25,
         'timeout' => 30,
-        'tls' => false,
+        'protocol' => 'http',
     );
 
     /**
@@ -51,15 +51,17 @@ class Swift_Transport_CurlTransport implements Swift_Transport
     }
 
     /**
-     * Not used.
+     * Test if cURL has been initilized.
+     *
+     * @return bool
      */
     public function isStarted()
     {
-        return false;
+        return $this->_started;
     }
 
     /**
-     * Not used.
+     * Start the SMTP connection.
      */
     public function start()
     {
@@ -142,7 +144,8 @@ class Swift_Transport_CurlTransport implements Swift_Transport
      */
     public function setTimeout($timeout)
     {
-        $this->_params['timeout'] = (int)$timeout;
+        $this->_params['timeout'] = (int) $timeout;
+        curl_setopt( $this->_curl, CURLOPT_CONNECTTIMEOUT, (int) $timeout );
 
         return $this;
     }
@@ -155,6 +158,22 @@ class Swift_Transport_CurlTransport implements Swift_Transport
     public function getTimeout()
     {
         return $this->_params['timeout'];
+    }
+
+    /**
+     * Set the encryption type (tls or ssl)
+     *
+     * @param string $encryption
+     *
+     * @return Swift_Transport_EsmtpTransport
+     */
+    public function setEncryption($encryption)
+    {
+        if ('ssl' == $encryption) {
+            $this->_params['protocol'] = 'https';
+        }
+
+        return $this;
     }
 
     /**
@@ -235,10 +254,13 @@ class Swift_Transport_CurlTransport implements Swift_Transport
         if( !is_resource($this->_curl) ) {
             return false;
         }
-        curl_setopt($this->_curl, CURLOPT_SSL_VERIFYPEER, false);
-        curl_setopt($this->_curl, CURLOPT_SSL_VERIFYHOST, false);
-        curl_setopt($this->_curl, CURLOPT_CAINFO,"cacert.pem");
-        curl_setopt($this->_curl, CURLOPT_CAPATH,"./");
+
+        if('https' == $this->_params['protocol']) {
+            curl_setopt($this->_curl, CURLOPT_SSL_VERIFYPEER, true);
+            curl_setopt($this->_curl, CURLOPT_SSL_VERIFYHOST, true);
+            curl_setopt($this->_curl, CURLOPT_CAINFO, dirname(__FILE__).'/cacert.pem');
+        }
+
         curl_setopt($this->_curl, CURLOPT_HTTPHEADER, array());
         curl_setopt($this->_curl, CURLOPT_RETURNTRANSFER, true);
     }
@@ -249,7 +271,7 @@ class Swift_Transport_CurlTransport implements Swift_Transport
             return false;
         }
 
-        curl_setopt($this->_curl, CURLOPT_URL, 'https://' . $this->getHost() . ':' . $this->getPort() );
+        curl_setopt($this->_curl, CURLOPT_URL, $this->_params['protocol'] . '://' . $this->getHost() . ':' . $this->getPort() );
     }
 
     /** Send the HELO welcome */
