@@ -1,6 +1,6 @@
 <?php
 
-class Swift_Transport_Esmtp_Auth_PlainAuthenticatorTest extends \SwiftMailerTestCase
+class Swift_Transport_Esmtp_PlainAuthenticatorTest extends \SwiftMailerTestCase
 {
     private $_agent;
 
@@ -64,6 +64,6 @@ class Swift_Transport_Esmtp_Auth_PlainAuthenticatorTest extends \SwiftMailerTest
 
     private function _getAuthenticator()
     {
-        return new Swift_Transport_Esmtp_Auth_PlainAuthenticator();
+        return new Swift_Transport_Esmtp_PlainAuthenticator();
     }
 }

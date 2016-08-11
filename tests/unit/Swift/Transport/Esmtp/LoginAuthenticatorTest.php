@@ -1,6 +1,6 @@
 <?php
 
-class Swift_Transport_Esmtp_Auth_CramMd5AuthenticatorTest extends \SwiftMailerTestCase
+class Swift_Transport_Esmtp_LoginAuthenticatorTest extends \SwiftMailerTestCase
 {
     private $_agent;
 
@@ -9,50 +9,50 @@ class Swift_Transport_Esmtp_Auth_CramMd5AuthenticatorTest extends \SwiftMailerTe
         $this->_agent = $this->getMockery('Swift_Transport_SmtpAgent')->shouldIgnoreMissing();
     }
 
-    public function testKeywordIsCramMd5()
+    public function testKeywordIsLogin()
     {
-        /* -- RFC 2195, 2.
-        The authentication type associated with CRAM is "CRAM-MD5".
-        */
-
-        $cram = $this->_getAuthenticator();
-        $this->assertEquals('CRAM-MD5', $cram->getAuthKeyword());
+        $login = $this->_getAuthenticator();
+        $this->assertEquals('LOGIN', $login->getAuthKeyword());
     }
 
     public function testSuccessfulAuthentication()
     {
-        $cram = $this->_getAuthenticator();
+        $login = $this->_getAuthenticator();
 
         $this->_agent->shouldReceive('executeCommand')
              ->once()
-             ->with("AUTH CRAM-MD5\r\n", array(334))
-             ->andReturn('334 '.base64_encode('<foo@bar>')."\r\n");
+             ->with("AUTH LOGIN\r\n", array(334));
         $this->_agent->shouldReceive('executeCommand')
              ->once()
-             ->with(\Mockery::any(), array(235));
+             ->with(base64_encode('jack')."\r\n", array(334));
+        $this->_agent->shouldReceive('executeCommand')
+             ->once()
+             ->with(base64_encode('pass')."\r\n", array(235));
 
-        $this->assertTrue($cram->authenticate($this->_agent, 'jack', 'pass'),
+        $this->assertTrue($login->authenticate($this->_agent, 'jack', 'pass'),
             '%s: The buffer accepted all commands authentication should succeed'
             );
     }
 
     public function testAuthenticationFailureSendRsetAndReturnFalse()
     {
-        $cram = $this->_getAuthenticator();
+        $login = $this->_getAuthenticator();
 
         $this->_agent->shouldReceive('executeCommand')
              ->once()
-             ->with("AUTH CRAM-MD5\r\n", array(334))
-             ->andReturn('334 '.base64_encode('<foo@bar>')."\r\n");
+             ->with("AUTH LOGIN\r\n", array(334));
         $this->_agent->shouldReceive('executeCommand')
              ->once()
-             ->with(\Mockery::any(), array(235))
+             ->with(base64_encode('jack')."\r\n", array(334));
+        $this->_agent->shouldReceive('executeCommand')
+             ->once()
+             ->with(base64_encode('pass')."\r\n", array(235))
              ->andThrow(new Swift_TransportException(""));
         $this->_agent->shouldReceive('executeCommand')
              ->once()
              ->with("RSET\r\n", array(250));
 
-        $this->assertFalse($cram->authenticate($this->_agent, 'jack', 'pass'),
+        $this->assertFalse($login->authenticate($this->_agent, 'jack', 'pass'),
             '%s: Authentication fails, so RSET should be sent'
             );
     }
@@ -61,6 +61,6 @@ class Swift_Transport_Esmtp_Auth_CramMd5AuthenticatorTest extends \SwiftMailerTe
 
     private function _getAuthenticator()
     {
-        return new Swift_Transport_Esmtp_Auth_CramMd5Authenticator();
+        return new Swift_Transport_Esmtp_LoginAuthenticator();
     }
 }

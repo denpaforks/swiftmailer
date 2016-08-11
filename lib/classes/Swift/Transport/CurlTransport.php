@@ -169,11 +169,24 @@ class Swift_Transport_CurlTransport implements Swift_Transport
      */
     public function setEncryption($encryption)
     {
+        $encryption = strtolower($encryption);
+
         if ('ssl' == $encryption) {
             $this->_params['protocol'] = 'https';
         }
+        $this->_params['encryption'] = $encryption;
 
         return $this;
+    }
+
+    /**
+     * Get the encryption type (tls or ssl)
+     *
+     * @return string
+     */
+    public function setEncryption($encryption)
+    {
+        return $this->_params['encryption'];
     }
 
     /**
