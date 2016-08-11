@@ -2,11 +2,9 @@
 
 class Swift_Transport_CurlTransportTest extends \SwiftMailerTestCase
 {
-    protected function _getTransport($dispatcher = null)
+    protected function _getTransport()
     {
-        if (!$dispatcher) {
-            $dispatcher = $this->_createEventDispatcher();
-        }
+        $dispatcher = $this->_createEventDispatcher();
 
         return new Swift_Transport_CurlTransport($dispatcher);
     }
@@ -49,5 +47,11 @@ class Swift_Transport_CurlTransportTest extends \SwiftMailerTestCase
             ->setTimeout(30)
             ;
         $this->assertEquals($ref, $smtp);
+    }
+
+    // -- Creation Methods
+    private function _createEventDispatcher()
+    {
+        return $this->getMockery('Swift_Events_EventDispatcher')->shouldIgnoreMissing();
     }
 }
