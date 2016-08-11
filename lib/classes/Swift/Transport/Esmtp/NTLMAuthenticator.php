@@ -15,7 +15,7 @@
  *
  * @author     Ward Peeters <ward@coding-tech.com>
  */
-class Swift_Transport_Esmtp_Auth_NTLMAuthenticator implements Swift_Transport_Esmtp_Authenticator
+class Swift_Transport_Esmtp_NTLMAuthenticator implements Swift_Transport_Esmtp_Authenticator
 {
     const NTLMSIG = "NTLMSSP\x00";
     const DESCONST = "KGS!@#$%";

@@ -13,7 +13,7 @@
  *
  * @author     Chris Corbyn
  */
-class Swift_Transport_Esmtp_Auth_LoginAuthenticator implements Swift_Transport_Esmtp_Authenticator
+class Swift_Transport_Esmtp_LoginAuthenticator implements Swift_Transport_Esmtp_Authenticator
 {
     /**
      * Get the name of the AUTH mechanism this Authenticator handles.
