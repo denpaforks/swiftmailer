@@ -58,19 +58,19 @@ Swift_DependencyContainer::getInstance()
     ))
 
     ->register('transport.crammd5auth')
-    ->asNewInstanceOf('Swift_Transport_Esmtp_Auth_CramMd5Authenticator')
+    ->asNewInstanceOf('Swift_Transport_Esmtp_CramMd5Authenticator')
 
     ->register('transport.loginauth')
-    ->asNewInstanceOf('Swift_Transport_Esmtp_Auth_LoginAuthenticator')
+    ->asNewInstanceOf('Swift_Transport_Esmtp_LoginAuthenticator')
 
     ->register('transport.plainauth')
-    ->asNewInstanceOf('Swift_Transport_Esmtp_Auth_PlainAuthenticator')
+    ->asNewInstanceOf('Swift_Transport_Esmtp_PlainAuthenticator')
 
     ->register('transport.xoauth2auth')
-    ->asNewInstanceOf('Swift_Transport_Esmtp_Auth_XOAuth2Authenticator')
+    ->asNewInstanceOf('Swift_Transport_Esmtp_XOAuth2Authenticator')
 
     ->register('transport.ntlmauth')
-    ->asNewInstanceOf('Swift_Transport_Esmtp_Auth_NTLMAuthenticator')
+    ->asNewInstanceOf('Swift_Transport_Esmtp_NTLMAuthenticator')
 
     ->register('transport.eventdispatcher')
     ->asNewInstanceOf('Swift_Events_SimpleEventDispatcher')

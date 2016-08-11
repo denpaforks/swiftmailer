@@ -145,6 +145,9 @@ class Swift_Transport_CurlTransport implements Swift_Transport
     public function setTimeout($timeout)
     {
         $this->_params['timeout'] = (int) $timeout;
+        if( !is_resource($this->_curl) ) {
+            $this->_doCurlInit();
+        }
         curl_setopt( $this->_curl, CURLOPT_CONNECTTIMEOUT, (int) $timeout );
 
         return $this;
